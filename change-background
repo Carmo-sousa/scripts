@@ -1,0 +1,52 @@
+#!/bin/sh
+
+#############################################################
+#                    CHANGE BACKGROUND                      #
+#############################################################
+# ./change-background.sh                                    #
+# Author: Rômulo do Carmo Sousa <METATRON>                  #
+# E-mail: carmosousa20@outlook.com                          #
+# Date:   16/06/2021                                        #
+# Description:                                              #
+#       Altera de forma randomica o background usando o feh #
+#                                                           #
+#############################################################
+
+FEH=$(which feh > /dev/null)
+
+if [ "$?" -eq 1 ]
+then
+    echo "O Comando feh não foi encontrado!"
+    read -p "Deseja instalar? [S/n] " OPTION
+    OPTION=${OPTION:-S}
+
+    case $OPTION in
+        s|S)
+            sudo apt install feh
+            ;;
+        n|N)
+            echo "Abortando!"
+            sleep 1
+            clear
+            exit 0
+            ;;
+        *)
+            echo "Opção inválida!"
+            exit 1
+            ;;
+esac
+fi
+
+PATH_FILES=~/Imagens/wallpapers
+LEN=$(ls $PATH_FILES | wc -l)
+
+RANGE=$(shuf -i 1-$LEN -n 1)
+
+if [ $RANGE -lt 10  ]
+then
+    RANGE="0$RANGE"
+fi
+
+WALLPAPER="$PATH_FILES/wallpaper-$RANGE.jpg"
+
+feh --bg-scale $WALLPAPER
